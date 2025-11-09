@@ -1,7 +1,7 @@
 import asyncio
 import base64
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import httpx
 from Crypto.Cipher import AES
 from google.protobuf.json_format import ParseDict, MessageToJson
@@ -54,7 +54,14 @@ def build_login_request(open_id: str, login_token: str) -> bytes:
 
 # === Get Access Token ===
 async def get_access_token(uid: str, password: str):
-    url = "https://ffmconnect.live.gop.garenanow.com/oauth/guest/token/grant"
+    url = "https://100067.connect.garena.com/oauth/guest/token/grant"
+    headers = {
+        "Host": "100067.connect.garena.com",
+        "User-Agent": "GarenaMSDK/4.0.19P4(G011A ;Android 10;en;EN;)",
+        "Content-Type": 'application/x-www-form-urlencoded',
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "close",
+    }
     payload = (
         f"uid={uid}&password={password}"
         + "&response_type=token"
@@ -62,20 +69,17 @@ async def get_access_token(uid: str, password: str):
         + "&client_secret=2ee44819e9b4598845141067b281621874d0d5d7af9d8f7e00c1e54715b7d1e3"
         + "&client_id=100067"
     )
-    headers = {
-        'User-Agent': USERAGENT,
-        'Content-Type': "application/x-www-form-urlencoded"
-    }
 
     async with httpx.AsyncClient() as client:
         response = await client.post(url, data=payload, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
         data = response.json()
         return data.get("access_token"), data.get("open_id")
 
 # === Get JWT Token ===
 async def get_jwt(uid: str, password: str):
-    token, open_id = await get_access_token(uid, password)
-    encrypted = aes_encrypt(build_login_request(open_id, token))
+    access_token, open_id = await get_access_token(uid, password)
+    encrypted = aes_encrypt(build_login_request(open_id, access_token))
     url = "https://loginbp.ggblueshark.com/MajorLogin"
     headers = {
         'User-Agent': USERAGENT,
@@ -89,20 +93,36 @@ async def get_jwt(uid: str, password: str):
         resp = await client.post(url, data=encrypted, headers=headers)
         msg = LoginRes()
         msg.ParseFromString(resp.content)
-        return json.loads(MessageToJson(msg))
+        response_data = json.loads(MessageToJson(msg))
+        response_data.pop("ttl", None) # Remove ttl if it exists
+        response_data.pop("anoUrl", None) # Remove anoUrl if it exists
+
+        # Reorder keys
+        ordered_response = {
+            "accountId": response_data.get("accountId"),
+            "agoraEnvironment": response_data.get("agoraEnvironment"),
+            "ipRegion": response_data.get("ipRegion"),
+            "lockRegion": response_data.get("lockRegion"),
+            "notiRegion": response_data.get("notiRegion"),
+            "serverUrl": response_data.get("serverUrl"),
+            "accessToken": access_token,
+            "token": response_data.get("token")
+        }
+        return ordered_response
 
 # === Flask App ===
 app = Flask(__name__)
 
-@app.route('/v1/auth/<string:cred>/<string:apikey>', methods=["GET"])
-def auth_route(cred, apikey):
+@app.route('/v1/auth/<string:apikey>', methods=["GET"])
+def auth_route(apikey):
     if apikey != VALID_API_KEY:
         return jsonify({"error": "Invalid API key."}), 401
 
-    if ':' not in cred:
-        return jsonify({"error": "Invalid format. Use id:pass."}), 400
+    uid = request.args.get('uid')
+    password = request.args.get('password')
 
-    uid, password = cred.split(':', 1)
+    if not uid or not password:
+        return jsonify({"error": "Missing uid or password."}), 400
 
     try:
         data = asyncio.run(get_jwt(uid, password))

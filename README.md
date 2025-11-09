@@ -1,12 +1,28 @@
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=180&section=header&text=FreeFire%20JWT%20API&fontSize=45&fontAlignY=35&animation=twinkling&fontColor=fff"/>
+</p>
 
-# 🎮 FreeFire JWT API
-
-A lightweight, asynchronous Flask-based API that emulates Free Fire’s login process to return account ***JWT Token*** in real-time.  
-Built using **Protobuf**, **AES encryption**, and **async HTTPX** for maximum accuracy and performance.
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/Flask-2.0+-black?style=for-the-badge&logo=flask"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python"></a>
+  <a href="#"><img src="https://img.shields.io/github/license/tsunstudio/freefire-bancheck?style=for-the-badge&color=purple"></a>
+  <a href="#"><img src="https://komarev.com/ghpvc/?username=tsunstudio-bancheck&label=Views&style=for-the-badge&color=brightgreen"></a>
+</p>
 
 ---
 
+<p align="center">
+
+A lightweight, asynchronous Flask-based API that emulates Free Fire’s login process to return account ***JWT Token*** in real-time.  
+Built using **Protobuf**, **AES encryption**, and **async HTTPX** for maximum accuracy and performance.
+</p>
+
+---
+
+<div align="center">
+
 ## 🚀 Features
+</div>
 
 ✅ AES-Encrypted Login Request  
 ✅ Protobuf Parsing (LoginRes)  
@@ -16,8 +32,10 @@ Built using **Protobuf**, **AES encryption**, and **async HTTPX** for maximum ac
 ✅ Clean JSON Response  
 
 ---
+<div align="center">
 
 ## 🧠 How It Works
+</div>
 
 This API simulates the Free Fire login handshake by:
 1. Requesting a Garena OAuth token using provided credentials.
@@ -31,7 +49,7 @@ This API simulates the Free Fire login handshake by:
 
 ```
 
-📦 FreeFire-Login-API
+📦 FreeFire-JWT-API
 ┣ 📜 app.py
 ┣ 📜 FreeFire.proto
 ┣ 📜 requirements.txt
@@ -45,8 +63,8 @@ This API simulates the Free Fire login handshake by:
 
 ### Step 1 — Clone Repository
 ```bash
-git clone https://github.com/TSun-FreeFire/TSun-FreeFire-JWT-API.git
-cd TSun-FreeFire-JWT-API
+git clone https://github.com/TSun-FreeFire/TSun-FF-JWT-API.git
+cd TSun-FF-JWT-API
 ````
 
 ### Step 2 — Install Dependencies
@@ -65,27 +83,26 @@ python app.py
 
 ## 🔑 Endpoint
 
-### **GET /v1/auth/<Uid:password>/apikey**
+### **GET /v1/auth/{apikey}?uid={uid}&password={password}**
 
 **Example Request:**
 
 ```
-http://127.0.0.1:5000/v1/auth/123456789:abcdef/saeed
+http://127.0.0.1:5000/v1/auth/tsun?uid=12345678&password=754NCUB3ZYJNAX1OI24B
 ```
 
 **Example Response:**
 
 ```json
 {
-  "accountId": "13678722441",
+  "accessToken": "f9596a1377d3daf61a",
+  "accountId": "1234567897",
   "agoraEnvironment": "live",
-  "anoUrl": "csoversea.stronghold.freefiremobile.com",
   "ipRegion": "PK",
   "lockRegion": "PK",
   "notiRegion": "SG",
   "serverUrl": "https://clientbp.ggwhitehawk.com",
-  "token": "eyJhbGciOiJIUzI1NiIsInN2ciI6IjEiLCJ0....",
-  "ttl": 28800
+  "token": "eyJhbGciOiJIUzI1NiIsInN2ciI6IjEiLCJ0eXAiOiJ"
 }
 ```
 
@@ -99,7 +116,7 @@ http://127.0.0.1:5000/v1/auth/123456789:abcdef/saeed
 
 ```json
 {
-  "error": "Invalid format. Use id:pass"
+  "error": "Invalid format. Use uid={uid}&password={password}"
 }
 ```
 
@@ -110,8 +127,8 @@ http://127.0.0.1:5000/v1/auth/123456789:abcdef/saeed
 You can modify the following in `app.py`:
 
 ```python
-VALID_API_KEY = "saeed"  #Line:33
-RELEASEVERSION = "OB50" #Line:32
+VALID_API_KEY = "tsun"  #Line:33
+RELEASEVERSION = "OB51" #Line:32
 ```
 
 ---
@@ -132,11 +149,14 @@ RELEASEVERSION = "OB50" #Line:32
 
 ---
 
-### 🧷 License
+## 📜 License
 
-This project is open-source for educational and research use only.
-Unauthorized or commercial misuse of Garena endpoints is strictly discouraged.
+This project is licensed under the **MIT License** — feel free to modify and share with credit.
 
 ---
 
-```
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=120&section=footer"/>
+</p>
+
+---
