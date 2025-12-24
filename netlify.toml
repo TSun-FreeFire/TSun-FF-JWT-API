@@ -1,7 +1,7 @@
 [build]
   command = "pip install -r requirements.txt"
   functions = "netlify/functions"
-  publish = "public"
+  publish = "dist"
 
 [[redirects]]
   from = "/*"
