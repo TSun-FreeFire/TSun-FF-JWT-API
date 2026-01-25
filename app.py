@@ -1,7 +1,7 @@
 import asyncio
 import base64
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import httpx
 from Crypto.Cipher import AES
 from google.protobuf.json_format import ParseDict, MessageToJson
@@ -30,7 +30,8 @@ MAIN_KEY = base64.b64decode('WWcmdGMlREV1aDYlWmNeOA==')
 MAIN_IV = base64.b64decode('Nm95WkRyMjJFM3ljaGpNJQ==')
 USERAGENT = "Dalvik/2.1.0 (Linux; U; Android 13; CPH2095 Build/RKQ1.211119.001)"
 RELEASEVERSION = "OB52"
-VALID_API_KEY = "saeed"
+# API key is now handled in the frontend configuration
+# VALID_API_KEY = "saeed"
 
 # === Crypto ===
 def pad(data: bytes) -> bytes:
@@ -113,10 +114,16 @@ async def get_jwt(uid: str, password: str):
 # === Flask App ===
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    """Serve the frontend dashboard"""
+    return render_template('index.html')
+
 @app.route('/v1/auth/<string:apikey>', methods=["GET"])
 def auth_route(apikey):
-    if apikey != VALID_API_KEY:
-        return jsonify({"error": "Invalid API key."}), 401
+    # API key validation is now handled in the frontend
+    # if apikey != VALID_API_KEY:
+    #     return jsonify({"error": "Invalid API key."}), 401
 
     uid = request.args.get('uid')
     password = request.args.get('password')

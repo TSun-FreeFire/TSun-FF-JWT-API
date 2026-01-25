@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeFire JWT API • Secure Authentication Platform</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/lucide-static/font/lucide.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <!-- Mesh Gradient Background -->
+    <div class="mesh-gradient"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="icon-flame"></i>
+                </div>
+                <div class="brand-content">
+                    <h1 class="brand-title">FreeFire JWT API</h1>
+                    <p class="brand-tagline">Secure Authentication Platform</p>
+                </div>
+            </div>
+
+            <div class="meta-info">
+                <span class="version-pill">v5.2</span>
+                <span class="release-pill">OB52</span>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="auth">
+                <i class="icon-zap"></i>
+                <span>Generate Token</span>
+            </button>
+            <button class="tab-btn" data-tab="docs">
+                <i class="icon-book"></i>
+                <span>API Docs</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Auth Tab -->
+            <section class="tab-content active" id="auth-tab">
+                <div class="grid">
+                    <!-- Auth Form Card -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div class="card-header-content">
+                                <h2 class="card-title">Authentication</h2>
+                                <p class="card-subtitle">Generate your JWT access token</p>
+                            </div>
+                            <div class="status-indicator"></div>
+                        </div>
+
+                        <form id="authForm" class="auth-form">
+                            <!-- UID Field -->
+                            <div class="form-field">
+                                <label class="field-label" for="uid">
+                                    <i class="icon-user"></i>
+                                    <span>USER ID</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="uid" class="field-input" placeholder="Enter your UID"
+                                        spellcheck="false" autocomplete="off" required>
+                                </div>
+                                <span class="field-hint">Your FreeFire account identifier</span>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="form-field">
+                                <label class="field-label" for="password">
+                                    <i class="icon-lock"></i>
+                                    <span>ACCESS TOKEN</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="password" class="field-input mono"
+                                        placeholder="Enter your access token" spellcheck="false" autocomplete="off"
+                                        required>
+                                </div>
+                                <span class="field-hint">Your secure authentication token</span>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn-primary" id="submitBtn">
+                                <span class="btn-content">
+                                    <i class="icon-zap"></i>
+                                    <span>GENERATE TOKEN</span>
+                                </span>
+                                <span class="btn-loader"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Info Card -->
+                    <div class="card glass-card info-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Quick Start</h3>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-item">
+                                <i class="icon-shield-check"></i>
+                                <div>
+                                    <h4>Secure Authentication</h4>
+                                    <p>AES-256 encrypted protobuf communication</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="icon-zap"></i>
+                                <div>
+                                    <h4>Real-time Processing</h4>
+                                    <p>Async I/O with sub-second response times</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="icon-code"></i>
+                                <div>
+                                    <h4>Developer Friendly</h4>
+                                    <p>Clean JSON responses with full data payload</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Response Section -->
+                <div class="response-section" id="responseSection" style="display: none;">
+                    <div class="card glass-card response-card">
+                        <div class="card-header">
+                            <div class="card-header-content">
+                                <i class="response-icon icon-circle-check"></i>
+                                <div>
+                                    <h2 class="card-title response-title">Success</h2>
+                                    <p class="card-subtitle response-message">Token generated successfully</p>
+                                </div>
+                            </div>
+                            <button class="btn-secondary" id="resetBtn">
+                                <i class="icon-refresh-cw"></i>
+                                <span>New Request</span>
+                            </button>
+                        </div>
+
+                        <!-- Stats Grid -->
+                        <div class="stats-grid" id="statsGrid"></div>
+
+                        <!-- JSON Output -->
+                        <div class="json-container">
+                            <div class="json-header">
+                                <div class="json-header-left">
+                                    <i class="icon-braces"></i>
+                                    <span>RESPONSE DATA</span>
+                                </div>
+                                <div class="copy-buttons" style="display: flex; gap: 8px;">
+                                    <button class="btn-icon copy-token" data-token="accessToken"
+                                        title="Copy access token to clipboard"
+                                        style="display: flex; align-items: center; gap: 4px; padding: 4px 8px;">
+                                        <i class="icon-copy"></i>
+                                        <span style="font-size: 0.75rem;">Access Token</span>
+                                    </button>
+                                    <button class="btn-icon copy-token" data-token="token"
+                                        title="Copy token to clipboard"
+                                        style="display: flex; align-items: center; gap: 4px; padding: 4px 8px;">
+                                        <i class="icon-copy"></i>
+                                        <span style="font-size: 0.75rem;">Token</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <pre class="json-output" id="jsonOutput"></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Docs Tab -->
+            <section class="tab-content" id="docs-tab">
+                <div class="card glass-card">
+                    <div class="card-header">
+                        <h2 class="card-title">API Documentation</h2>
+                    </div>
+                    <div class="docs-content">
+                        <div class="doc-section">
+                            <h3>Endpoint</h3>
+                            <div class="code-block">
+                                <code>GET /v1/auth/{apikey}?uid={uid}&password={password}</code>
+                            </div>
+                        </div>
+
+                        <div class="doc-section">
+                            <h3>Parameters</h3>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>apikey</code></td>
+                                        <td>String</td>
+                                        <td>Your API authentication key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>uid</code></td>
+                                        <td>String</td>
+                                        <td>FreeFire user identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>password</code></td>
+                                        <td>String</td>
+                                        <td>User access token</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="doc-section">
+                            <h3>Example Response</h3>
+                            <div class="code-block">
+                                <pre>{
+  "accountId": "1234567890",
+  "agoraEnvironment": "live",
+  "ipRegion": "US",
+  "lockRegion": "US",
+  "notiRegion": "SG",
+  "serverUrl": "https://clientbp.ggwhitehawk.com",
+  "accessToken": "f9596a1377d3daf61a",
+  "token": "eyJhbGciOiJIUzI1NiIsInN2ciI6IjEi..."
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                Developed by
+                <a href="https://github.com/saeedx302" target="_blank" rel="noopener">𝙎ค૯𝙀𝘿✘🫀</a>
+                <span class="separator">•</span>
+                Team
+                <a href="https://github.com/TSun-FreeFire" target="_blank" rel="noopener">TSun FreeFire</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>
