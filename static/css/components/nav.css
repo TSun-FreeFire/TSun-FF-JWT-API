@@ -1,0 +1,85 @@
+/* Navigation (Asymmetric Pill Rail) */
+.nav-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 3rem;
+    position: relative;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 100px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.tab-btn:hover {
+    color: #fff;
+}
+
+.tab-btn.active {
+    color: #000;
+}
+
+/* The "Vein" Indicator */
+.nav-indicator {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    /* Initial, JS will update */
+    height: calc(100% - 1rem);
+    background: var(--accent-biolume);
+    border-radius: 100px;
+    z-index: 1;
+    transition:
+        left 0.5s var(--easing-organic),
+        width 0.5s var(--easing-organic);
+    box-shadow: 0 0 15px rgba(122, 255, 199, 0.4);
+}
+
+/* Pulse animation for the vein */
+.nav-indicator::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: inherit;
+    filter: blur(4px);
+    opacity: 0.6;
+    animation: vein-pulse 2s infinite ease-in-out;
+}
+
+@keyframes vein-pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}

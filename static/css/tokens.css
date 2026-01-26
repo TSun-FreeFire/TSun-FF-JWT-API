@@ -1,0 +1,31 @@
+:root {
+    /* Base Colors */
+    --bg-core: #050404;
+    --bg-surface: #0b0b0b;
+
+    /* Accents */
+    --accent-biolume: #7AFFC7;
+    --accent-copper: #B86A41;
+
+    /* Effects */
+    --pearl: rgba(255, 255, 255, 0.06);
+    --glass-blur: 14px;
+    --card-radius: 16px;
+
+    /* Typography */
+    --font-heading: 'Sora', 'Neue Montreal', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Animation */
+    --easing-organic: cubic-bezier(.2, .9, .15, 1);
+
+    /* Semantic Tokens */
+    --surface-1: var(--bg-surface);
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --focus-glow: 0 0 0 2px var(--accent-biolume);
+
+    /* Grain (Data URI for noise) */
+    --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+}

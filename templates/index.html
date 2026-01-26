@@ -4,26 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeFire JWT API • Secure Authentication Platform</title>
+    <title>FreeFire JWT API</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Neue+Montreal:wght@500;700&family=Sora:wght@400;600;700&display=swap"
         rel="stylesheet">
 
     <!-- Lucide Icons -->
     <link href="https://cdn.jsdelivr.net/npm/lucide-static/font/lucide.css" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/tokens.css">
+    <link rel="stylesheet" href="/static/css/theme.css">
+    <link rel="stylesheet" href="/static/css/components/layout.css">
+    <link rel="stylesheet" href="/static/css/components/cards.css">
+    <link rel="stylesheet" href="/static/css/components/buttons.css">
+    <link rel="stylesheet" href="/static/css/components/inputs.css">
+    <link rel="stylesheet" href="/static/css/components/nav.css">
+    <link rel="stylesheet" href="/static/css/components/data.css">
 </head>
 
 <body>
-    <!-- Mesh Gradient Background -->
-    <div class="mesh-gradient"></div>
-    <div class="grid-overlay"></div>
+    <!-- Global FX Layer (Grain, Vignette, Scanlines) -->
+    <div class="fx-layer"></div>
 
     <!-- Main Container -->
     <div class="container">
@@ -34,26 +40,27 @@
                     <i class="icon-flame"></i>
                 </div>
                 <div class="brand-content">
-                    <h1 class="brand-title">FreeFire JWT API</h1>
-                    <p class="brand-tagline">Secure Authentication Platform</p>
+                    <h1 class="brand-title">TSun Jwt Maker</h1>
+                    <p class="brand-tagline">Secure Authentication Node</p>
                 </div>
             </div>
 
             <div class="meta-info">
-                <span class="version-pill">v5.2</span>
+                <span class="version-pill">v5.7</span>
                 <span class="release-pill">OB52</span>
             </div>
         </header>
 
         <!-- Navigation Tabs -->
-        <nav class="nav-tabs">
+        <nav class="nav-tabs" id="navTabs">
+            <div class="nav-indicator" id="navIndicator"></div>
             <button class="tab-btn active" data-tab="auth">
                 <i class="icon-zap"></i>
-                <span>Generate Token</span>
+                <span>Generate</span>
             </button>
             <button class="tab-btn" data-tab="docs">
                 <i class="icon-book"></i>
-                <span>API Docs</span>
+                <span>Documentation</span>
             </button>
         </nav>
 
@@ -61,18 +68,19 @@
         <main class="main">
             <!-- Auth Tab -->
             <section class="tab-content active" id="auth-tab">
-                <div class="grid">
+                <div class="grid"
+                    style="display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 600px; margin: 0 auto;">
                     <!-- Auth Form Card -->
-                    <div class="card glass-card">
+                    <div class="card membrane">
                         <div class="card-header">
                             <div class="card-header-content">
                                 <h2 class="card-title">Authentication</h2>
-                                <p class="card-subtitle">Generate your JWT access token</p>
+                                <p class="card-subtitle">Initialize secure session</p>
                             </div>
                             <div class="status-indicator"></div>
                         </div>
 
-                        <form id="authForm" class="auth-form">
+                        <form id="authForm" class="auth-form" autocomplete="off">
                             <!-- UID Field -->
                             <div class="form-field">
                                 <label class="field-label" for="uid">
@@ -80,31 +88,32 @@
                                     <span>USER ID</span>
                                 </label>
                                 <div class="input-wrapper">
-                                    <input type="text" id="uid" class="field-input" placeholder="Enter your UID"
-                                        spellcheck="false" autocomplete="off" required>
+                                    <input type="text" id="uid" name="uid-field" class="field-input"
+                                        placeholder="Enter UID sequence" spellcheck="false" autocomplete="off" readonly
+                                        onfocus="this.removeAttribute('readonly');" required>
                                 </div>
-                                <span class="field-hint">Your FreeFire account identifier</span>
+                                <span class="field-hint">Target account identifier</span>
                             </div>
 
                             <!-- Password Field -->
                             <div class="form-field">
                                 <label class="field-label" for="password">
                                     <i class="icon-lock"></i>
-                                    <span>ACCESS TOKEN</span>
+                                    <span>ACCESS KEY</span>
                                 </label>
                                 <div class="input-wrapper">
-                                    <input type="password" id="password" class="field-input mono"
-                                        placeholder="Enter your access token" spellcheck="false" autocomplete="off"
-                                        required>
+                                    <input type="password" id="password" name="password-field" class="field-input mono"
+                                        placeholder="Enter access token" spellcheck="false" autocomplete="new-password"
+                                        readonly onfocus="this.removeAttribute('readonly');" required>
                                 </div>
-                                <span class="field-hint">Your secure authentication token</span>
+                                <span class="field-hint">Encrypted authorization key</span>
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn-primary" id="submitBtn">
+                            <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%;">
                                 <span class="btn-content">
                                     <i class="icon-zap"></i>
-                                    <span>GENERATE TOKEN</span>
+                                    <span>INITIATE SEQUENCE</span>
                                 </span>
                                 <span class="btn-loader"></span>
                             </button>
@@ -112,30 +121,25 @@
                     </div>
 
                     <!-- Info Card -->
-                    <div class="card glass-card info-card">
+                    <div class="card membrane info-card">
                         <div class="card-header">
-                            <h3 class="card-title">Quick Start</h3>
+                            <h3 class="card-title" style="font-size: 1.2rem;">System Status</h3>
                         </div>
-                        <div class="info-content">
-                            <div class="info-item">
-                                <i class="icon-shield-check"></i>
+                        <div class="info-content" style="display: grid; gap: 1.5rem;">
+                            <div class="info-item" style="display: flex; gap: 1rem; align-items: flex-start;">
+                                <i class="icon-shield-check" style="color: var(--accent-biolume);"></i>
                                 <div>
-                                    <h4>Secure Authentication</h4>
-                                    <p>AES-256 encrypted protobuf communication</p>
+                                    <h4 style="margin-bottom: 0.25rem; color: #fff;">Encrypted Link</h4>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary);">AES-256 Protobuf
+                                        channel active</p>
                                 </div>
                             </div>
-                            <div class="info-item">
-                                <i class="icon-zap"></i>
+                            <div class="info-item" style="display: flex; gap: 1rem; align-items: flex-start;">
+                                <i class="icon-cpu" style="color: var(--accent-biolume);"></i>
                                 <div>
-                                    <h4>Real-time Processing</h4>
-                                    <p>Async I/O with sub-second response times</p>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <i class="icon-code"></i>
-                                <div>
-                                    <h4>Developer Friendly</h4>
-                                    <p>Clean JSON responses with full data payload</p>
+                                    <h4 style="margin-bottom: 0.25rem; color: #fff;">Neural Processing</h4>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Async I/O with < 50ms
+                                            latency</p>
                                 </div>
                             </div>
                         </div>
@@ -143,44 +147,42 @@
                 </div>
 
                 <!-- Response Section -->
-                <div class="response-section" id="responseSection" style="display: none;">
-                    <div class="card glass-card response-card">
+                <div class="response-section" id="responseSection"
+                    style="display: none; margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <div class="card membrane response-card">
                         <div class="card-header">
-                            <div class="card-header-content">
-                                <i class="response-icon icon-circle-check"></i>
+                            <div class="card-header-content" style="display: flex; align-items: center; gap: 1rem;">
+                                <i class="response-icon icon-circle-check"
+                                    style="color: var(--accent-biolume); width: 24px; height: 24px;"></i>
                                 <div>
-                                    <h2 class="card-title response-title">Success</h2>
+                                    <h2 class="card-title response-title" style="margin: 0; font-size: 1.25rem;">
+                                        Sequence Complete</h2>
                                     <p class="card-subtitle response-message">Token generated successfully</p>
                                 </div>
                             </div>
-                            <button class="btn-secondary" id="resetBtn">
+                            <button class="btn btn-secondary" id="resetBtn">
                                 <i class="icon-refresh-cw"></i>
-                                <span>New Request</span>
+                                <span>Reset</span>
                             </button>
                         </div>
 
-                        <!-- Stats Grid -->
-                        <div class="stats-grid" id="statsGrid"></div>
-
                         <!-- JSON Output -->
-                        <div class="json-container">
+                        <div class="json-container" style="margin-top: 1.5rem;">
                             <div class="json-header">
                                 <div class="json-header-left">
                                     <i class="icon-braces"></i>
-                                    <span>RESPONSE DATA</span>
+                                    <span>PAYLOAD DATA</span>
                                 </div>
                                 <div class="copy-buttons" style="display: flex; gap: 8px;">
-                                    <button class="btn-icon copy-token" data-token="accessToken"
-                                        title="Copy access token to clipboard"
-                                        style="display: flex; align-items: center; gap: 4px; padding: 4px 8px;">
+                                    <button class="btn btn-secondary copy-token" data-token="accessToken"
+                                        title="Copy access token" style="padding: 0.5rem; font-size: 0.75rem;">
                                         <i class="icon-copy"></i>
-                                        <span style="font-size: 0.75rem;">Access Token</span>
+                                        <span>Access Token</span>
                                     </button>
-                                    <button class="btn-icon copy-token" data-token="token"
-                                        title="Copy token to clipboard"
-                                        style="display: flex; align-items: center; gap: 4px; padding: 4px 8px;">
+                                    <button class="btn btn-secondary copy-token" data-token="token" title="Copy token"
+                                        style="padding: 0.5rem; font-size: 0.75rem;">
                                         <i class="icon-copy"></i>
-                                        <span style="font-size: 0.75rem;">Token</span>
+                                        <span>Token</span>
                                     </button>
                                 </div>
                             </div>
@@ -191,63 +193,48 @@
             </section>
 
             <!-- Docs Tab -->
-            <section class="tab-content" id="docs-tab">
-                <div class="card glass-card">
+            <section class="tab-content hidden" id="docs-tab">
+                <div class="card membrane" style="max-width: 800px; margin: 0 auto;">
                     <div class="card-header">
                         <h2 class="card-title">API Documentation</h2>
                     </div>
                     <div class="docs-content">
-                        <div class="doc-section">
-                            <h3>Endpoint</h3>
+                        <div class="doc-section" style="margin-bottom: 2rem;">
+                            <h3 style="margin-bottom: 1rem; color: var(--accent-biolume);">Endpoint</h3>
                             <div class="code-block">
                                 <code>GET /v1/auth/{apikey}?uid={uid}&password={password}</code>
                             </div>
                         </div>
 
                         <div class="doc-section">
-                            <h3>Parameters</h3>
-                            <table class="params-table">
+                            <h3 style="margin-bottom: 1rem; color: var(--accent-biolume);">Parameters</h3>
+                            <table class="params-table"
+                                style="width: 100%; border-collapse: collapse; text-align: left;">
                                 <thead>
-                                    <tr>
-                                        <th>Parameter</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <th style="padding: 1rem; color: var(--text-secondary);">Parameter</th>
+                                        <th style="padding: 1rem; color: var(--text-secondary);">Type</th>
+                                        <th style="padding: 1rem; color: var(--text-secondary);">Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><code>apikey</code></td>
-                                        <td>String</td>
-                                        <td>Your API authentication key</td>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                        <td style="padding: 1rem; font-family: var(--font-mono);">apikey</td>
+                                        <td style="padding: 1rem;">String</td>
+                                        <td style="padding: 1rem; color: var(--text-secondary);">Authentication key</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                        <td style="padding: 1rem; font-family: var(--font-mono);">uid</td>
+                                        <td style="padding: 1rem;">String</td>
+                                        <td style="padding: 1rem; color: var(--text-secondary);">User identifier</td>
                                     </tr>
                                     <tr>
-                                        <td><code>uid</code></td>
-                                        <td>String</td>
-                                        <td>FreeFire user identifier</td>
-                                    </tr>
-                                    <tr>
-                                        <td><code>password</code></td>
-                                        <td>String</td>
-                                        <td>User access token</td>
+                                        <td style="padding: 1rem; font-family: var(--font-mono);">password</td>
+                                        <td style="padding: 1rem;">String</td>
+                                        <td style="padding: 1rem; color: var(--text-secondary);">Access token</td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-
-                        <div class="doc-section">
-                            <h3>Example Response</h3>
-                            <div class="code-block">
-                                <pre>{
-  "accountId": "1234567890",
-  "agoraEnvironment": "live",
-  "ipRegion": "US",
-  "lockRegion": "US",
-  "notiRegion": "SG",
-  "serverUrl": "https://clientbp.ggwhitehawk.com",
-  "accessToken": "f9596a1377d3daf61a",
-  "token": "eyJhbGciOiJIUzI1NiIsInN2ciI6IjEi..."
-}</pre>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -257,16 +244,17 @@
         <!-- Footer -->
         <footer class="footer">
             <p>
-                Developed by
+                System Architecture by
                 <a href="https://github.com/saeedx302" target="_blank" rel="noopener">𝙎ค૯𝙀𝘿✘🫀</a>
                 <span class="separator">•</span>
-                Team
+                Core
                 <a href="https://github.com/TSun-FreeFire" target="_blank" rel="noopener">TSun FreeFire</a>
             </p>
         </footer>
     </div>
 
     <!-- JavaScript -->
+    <script src="/static/js/animations.js"></script>
     <script src="/static/js/app.js"></script>
 </body>
 
