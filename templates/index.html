@@ -85,11 +85,11 @@
                             <div class="form-field">
                                 <label class="field-label" for="uid">
                                     <i class="icon-user"></i>
-                                    <span>USER ID</span>
+                                    <span>Guest UID</span>
                                 </label>
                                 <div class="input-wrapper">
                                     <input type="text" id="uid" name="uid-field" class="field-input"
-                                        placeholder="Enter UID sequence" spellcheck="false" autocomplete="off" readonly
+                                        placeholder="Enter UID" spellcheck="false" autocomplete="off" readonly
                                         onfocus="this.removeAttribute('readonly');" required>
                                 </div>
                                 <span class="field-hint">Target account identifier</span>
@@ -99,11 +99,11 @@
                             <div class="form-field">
                                 <label class="field-label" for="password">
                                     <i class="icon-lock"></i>
-                                    <span>ACCESS KEY</span>
+                                    <span>Guest Password</span>
                                 </label>
                                 <div class="input-wrapper">
                                     <input type="password" id="password" name="password-field" class="field-input mono"
-                                        placeholder="Enter access token" spellcheck="false" autocomplete="new-password"
+                                        placeholder="Enter Password" spellcheck="false" autocomplete="new-password"
                                         readonly onfocus="this.removeAttribute('readonly');" required>
                                 </div>
                                 <span class="field-hint">Encrypted authorization key</span>
@@ -226,12 +226,12 @@
                                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                                         <td style="padding: 1rem; font-family: var(--font-mono);">uid</td>
                                         <td style="padding: 1rem;">String</td>
-                                        <td style="padding: 1rem; color: var(--text-secondary);">User identifier</td>
+                                        <td style="padding: 1rem; color: var(--text-secondary);">Guest UID</td>
                                     </tr>
                                     <tr>
                                         <td style="padding: 1rem; font-family: var(--font-mono);">password</td>
                                         <td style="padding: 1rem;">String</td>
-                                        <td style="padding: 1rem; color: var(--text-secondary);">Access token</td>
+                                        <td style="padding: 1rem; color: var(--text-secondary);">Guest Password</td>
                                     </tr>
                                 </tbody>
                             </table>
