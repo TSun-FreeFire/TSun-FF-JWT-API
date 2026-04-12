@@ -8,7 +8,7 @@
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.75rem;
-    color: var(--text-secondary);
+    color: var(--secondary);
     font-size: 0.85rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -21,10 +21,10 @@
 
 .field-input {
     width: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0;
+    padding: 1rem;
     color: var(--text-primary);
     font-family: var(--font-mono);
     font-size: 1rem;
@@ -33,16 +33,14 @@
 
 .field-input:focus {
     outline: none;
-    border-color: var(--accent-biolume);
-    box-shadow:
-        0 0 0 1px var(--accent-biolume),
-        0 0 20px rgba(122, 255, 199, 0.1);
-    background: rgba(0, 0, 0, 0.5);
+    border-color: var(--primary);
+    box-shadow: var(--focus-glow);
+    background: rgba(220, 38, 38, 0.04);
 }
 
 /* Glowing Caret (Simulated) */
 .field-input {
-    caret-color: var(--accent-biolume);
+    caret-color: var(--primary);
 }
 
 /* Scanning Line on Focus */
@@ -53,9 +51,9 @@
     left: 0;
     height: 2px;
     width: 0%;
-    background: var(--accent-biolume);
+    background: var(--primary);
     transition: width 0.4s var(--easing-organic);
-    box-shadow: 0 -2px 8px var(--accent-biolume);
+    box-shadow: 0 -2px 12px rgba(220, 38, 38, 0.55);
 }
 
 .input-wrapper:focus-within::after {
@@ -66,5 +64,5 @@
     display: block;
     margin-top: 0.5rem;
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--text-muted);
 }

@@ -128,7 +128,7 @@ You can modify the following in `app.py`:
 
 ```python
 VALID_API_KEY = "tsun"  #Line:33
-RELEASEVERSION = "OB51" #Line:32
+RELEASEVERSION = "OB53" #Line:32
 ```
 
 ---

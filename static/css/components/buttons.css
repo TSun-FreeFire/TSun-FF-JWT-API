@@ -19,40 +19,32 @@
 }
 
 .btn-primary {
-    background: var(--accent-copper);
-    color: #000;
-    /* Contrast for copper */
-    box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: var(--primary);
+    color: #fff;
+    box-shadow: none;
 }
 
 .btn-primary:hover {
-    background: #c57d56;
-    /* Slightly lighter copper */
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 0 0 2px var(--accent-biolume);
-    /* Biolume rim */
-    transform: translateY(-2px);
-    color: #000;
+    background: var(--primary-strong);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+    transform: translateY(-1px);
+    color: #fff;
 }
 
 .btn-primary:active {
-    transform: scaleY(0.985) translateY(0);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    transform: translateY(0);
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.05);
+    background: #0f0f0f;
     color: var(--text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #262626;
+    border-radius: 99px;
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--text-primary);
+    background: #161616;
+    border-color: rgba(220, 38, 38, 0.5);
 }
 
 /* Button Loader */
@@ -60,8 +52,8 @@
     display: none;
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(0, 0, 0, 0.3);
-    border-top-color: #000;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-top-color: #fff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }

@@ -96,7 +96,7 @@ const Animations = {
         particle.className = 'trail-particle';
 
         const size = Math.random() * 3 + 1;
-        const hue = Math.random() > 0.5 ? 167 : 28; // Biolume green or Copper
+        const color = Math.random() > 0.5 ? '#dc2626' : '#8e8ea3';
         const opacity = Math.random() * 0.4 + 0.3;
 
         Object.assign(particle.style, {
@@ -105,12 +105,12 @@ const Animations = {
             left: `${x}px`,
             width: `${size}px`,
             height: `${size}px`,
-            background: `hsl(${hue}, 100%, 65%)`,
+            background: color,
             borderRadius: '50%',
             pointerEvents: 'none',
             zIndex: '9998',
             opacity: opacity,
-            boxShadow: `0 0 ${size * 3}px hsl(${hue}, 100%, 65%)`
+            boxShadow: `0 0 ${size * 3}px ${color}`
         });
 
         document.body.appendChild(particle);
@@ -146,7 +146,7 @@ const Animations = {
             const destinationY = Math.sin(angle) * velocity;
             const rotation = Math.random() * 360;
             const delay = Math.random() * 0.15;
-            const hue = Math.random() > 0.3 ? 167 : 28; // Mostly biolume, occasionally copper
+            const color = Math.random() > 0.35 ? '#dc2626' : '#f0f0f0';
 
             Object.assign(particle.style, {
                 position: 'fixed',
@@ -154,12 +154,12 @@ const Animations = {
                 left: `${x}px`,
                 width: `${size}px`,
                 height: `${size}px`,
-                background: `hsl(${hue}, 100%, 65%)`,
+                background: color,
                 borderRadius: '50%',
                 pointerEvents: 'none',
                 zIndex: '10000',
                 opacity: '0.9',
-                boxShadow: `0 0 15px hsl(${hue}, 100%, 65%)`,
+                boxShadow: `0 0 15px ${color}`,
                 transform: `translate(-50%, -50%) rotate(${rotation}deg)`
             });
 

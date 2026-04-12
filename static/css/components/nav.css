@@ -1,11 +1,11 @@
 /* Navigation (Asymmetric Pill Rail) */
 .nav-tabs {
     display: flex;
-    background: rgba(255, 255, 255, 0.03);
+    background: #0b0b0b;
     backdrop-filter: blur(10px);
     padding: 0.5rem;
-    border-radius: 100px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0;
+    border: 1px solid var(--border-subtle);
     margin-bottom: 3rem;
     position: relative;
     width: fit-content;
@@ -18,7 +18,7 @@
     border: none;
     color: var(--text-secondary);
     padding: 0.75rem 1.5rem;
-    border-radius: 100px;
+    border-radius: 0;
     font-family: var(--font-heading);
     font-weight: 600;
     font-size: 0.9rem;
@@ -32,11 +32,11 @@
 }
 
 .tab-btn:hover {
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .tab-btn.active {
-    color: #000;
+    color: #fff;
 }
 
 /* The "Vein" Indicator */
@@ -46,13 +46,13 @@
     left: 0.5rem;
     /* Initial, JS will update */
     height: calc(100% - 1rem);
-    background: var(--accent-biolume);
-    border-radius: 100px;
+    background: var(--primary);
+    border-radius: 0;
     z-index: 1;
     transition:
         left 0.5s var(--easing-organic),
         width 0.5s var(--easing-organic);
-    box-shadow: 0 0 15px rgba(122, 255, 199, 0.4);
+    box-shadow: 0 0 18px rgba(220, 38, 38, 0.45);
 }
 
 /* Pulse animation for the vein */
@@ -74,12 +74,12 @@
 
     0%,
     100% {
-        opacity: 0.4;
+        opacity: 0.35;
         transform: scale(1);
     }
 
     50% {
-        opacity: 0.8;
+        opacity: 0.7;
         transform: scale(1.05);
     }
 }

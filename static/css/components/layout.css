@@ -17,13 +17,13 @@
 .brand-icon {
     width: 48px;
     height: 48px;
-    background: var(--accent-biolume);
-    border-radius: 12px;
+    background: var(--primary);
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #000;
-    box-shadow: 0 0 20px rgba(122, 255, 199, 0.3);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
 }
 
 .brand-title {
@@ -45,12 +45,13 @@
 
 .version-pill,
 .release-pill {
-    background: rgba(255, 255, 255, 0.05);
+    background: #0f0f0f;
     padding: 0.25rem 0.75rem;
-    border-radius: 100px;
+    border-radius: 0;
     font-size: 0.75rem;
     font-family: var(--font-mono);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
 }
 
 /* Footer */
@@ -64,7 +65,7 @@
 }
 
 .footer a {
-    color: var(--accent-biolume);
+    color: var(--primary);
     text-decoration: none;
     transition: opacity 0.2s;
 }

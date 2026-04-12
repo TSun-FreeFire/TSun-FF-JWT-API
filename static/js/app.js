@@ -25,6 +25,7 @@ const App = {
         this.bindEvents();
         this.initTabs();
         this.initCopyButtons();
+        this.initGsap();
     },
 
     /**
@@ -57,21 +58,93 @@ const App = {
     initTabs() {
         this.elements.tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                const targetTab = btn.dataset.tab;
+                this.switchTab(btn.dataset.tab);
+            });
+        });
+    },
 
-                // Update active states
-                this.elements.tabBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+    switchTab(targetTab) {
+        const currentBtn = document.querySelector('.tab-btn.active');
+        const currentContent = document.querySelector('.tab-content.active');
+        const nextContent = document.getElementById(`${targetTab}-tab`);
+        const nextBtn = document.querySelector(`.tab-btn[data-tab="${targetTab}"]`);
 
-                // Show target content
-                this.elements.tabContents.forEach(content => {
-                    if (content.id === `${targetTab}-tab`) {
-                        content.classList.remove('hidden');
-                        content.classList.add('active');
-                    } else {
-                        content.classList.add('hidden');
-                        content.classList.remove('active');
-                    }
+        if (currentBtn) {
+            currentBtn.classList.remove('active');
+        }
+
+        if (nextBtn) {
+            nextBtn.classList.add('active');
+        }
+
+        if (!nextContent || currentContent === nextContent) return;
+
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const activateNext = () => {
+            this.elements.tabContents.forEach(content => {
+                if (content === nextContent) {
+                    content.classList.remove('hidden');
+                    content.classList.add('active');
+                } else {
+                    content.classList.add('hidden');
+                    content.classList.remove('active');
+                }
+            });
+        };
+
+        if (window.gsap && !reducedMotion && currentContent) {
+            gsap.to(currentContent, {
+                opacity: 0,
+                y: 18,
+                duration: 0.18,
+                ease: 'power2.out',
+                onComplete: () => {
+                    activateNext();
+                    gsap.fromTo(nextContent, { opacity: 0, y: 18 }, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.42,
+                        ease: 'power3.out'
+                    });
+                }
+            });
+            return;
+        }
+
+        activateNext();
+    },
+
+    initGsap() {
+        if (!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        gsap.set(['.brand', '.meta-info', '.nav-tabs', '.card', '.footer'], { opacity: 0, y: 24 });
+        gsap.set('.tab-content.active', { opacity: 0, y: 18 });
+
+        const intro = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+        intro
+            .to('.brand', { opacity: 1, y: 0, duration: 0.75 })
+            .to('.meta-info', { opacity: 1, y: 0, duration: 0.55 }, '<0.1')
+            .to('.nav-tabs', { opacity: 1, y: 0, duration: 0.55 }, '<0.1')
+            .to('.card', { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 }, '<0.05')
+            .to('.footer', { opacity: 1, y: 0, duration: 0.45 }, '<0.05')
+            .to('.tab-content.active', { opacity: 1, y: 0, duration: 0.45 }, '<0.05');
+
+        document.querySelectorAll('.card, .btn, .tab-btn').forEach((element) => {
+            element.addEventListener('mouseenter', () => {
+                gsap.to(element, {
+                    scale: element.classList.contains('btn') ? 1.02 : 1.01,
+                    duration: 0.2,
+                    ease: 'power2.out'
+                });
+            });
+
+            element.addEventListener('mouseleave', () => {
+                gsap.to(element, {
+                    scale: 1,
+                    duration: 0.24,
+                    ease: 'power2.out'
                 });
             });
         });
@@ -131,7 +204,7 @@ const App = {
         // Update UI
         responseSection.querySelector('.response-title').textContent = 'Sequence Complete';
         responseSection.querySelector('.response-message').textContent = 'Token generated successfully';
-        responseSection.querySelector('.response-icon').style.color = 'var(--accent-biolume)';
+        responseSection.querySelector('.response-icon').style.color = 'var(--primary)';
 
         // Format JSON
         const formatted = JSON.stringify(data, null, 2);
@@ -140,6 +213,17 @@ const App = {
 
         // Show section
         responseSection.style.display = 'block';
+
+        if (window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.fromTo(responseSection, { opacity: 0, y: 20, scale: 0.98 }, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.45,
+                ease: 'power3.out'
+            });
+        }
+
         responseSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     },
 
@@ -161,6 +245,17 @@ const App = {
         jsonOutput.dataset.raw = formatted;
 
         responseSection.style.display = 'block';
+
+        if (window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.fromTo(responseSection, { opacity: 0, y: 20, scale: 0.98 }, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.45,
+                ease: 'power3.out'
+            });
+        }
+
         responseSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     },
 
@@ -198,7 +293,7 @@ const App = {
             await navigator.clipboard.writeText(text);
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<i class="icon-check"></i><span>Copied</span>';
-            btn.style.borderColor = 'var(--accent-biolume)';
+            btn.style.borderColor = 'var(--primary)';
 
             setTimeout(() => {
                 btn.innerHTML = originalContent;
