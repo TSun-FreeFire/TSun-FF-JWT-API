@@ -289,8 +289,7 @@ const App = {
     },
 
     async copyToClipboard(text, btn) {
-        try {
-            await navigator.clipboard.writeText(text);
+        const onSuccess = () => {
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<i class="icon-check"></i><span>Copied</span>';
             btn.style.borderColor = 'var(--primary)';
@@ -301,9 +300,39 @@ const App = {
                 btn.innerHTML = originalContent;
                 btn.style.borderColor = '';
             }, 2000);
-        } catch (err) {
+        };
+
+        const onError = (err) => {
             console.error('Clipboard error', err);
             this.showToast('Failed to copy', 'error');
+        };
+
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+                onSuccess();
+            } else {
+                // Fallback for non-HTTPS or missing clipboard API
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                // Avoid scrolling to bottom
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.position = "fixed";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) onSuccess();
+                    else onError(new Error('Fallback copy failed'));
+                } catch (err) {
+                    onError(err);
+                }
+                document.body.removeChild(textArea);
+            }
+        } catch (err) {
+            onError(err);
         }
     },
 
