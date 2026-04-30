@@ -348,13 +348,13 @@ const App = {
         // Custom bouncing popup
         if (window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             gsap.fromTo(toast, 
-                { y: 100, opacity: 0, scale: 0.8, x: '-50%' }, 
-                { y: 0, opacity: 1, scale: 1, x: '-50%', duration: 0.7, ease: 'elastic.out(1, 0.5)' }
+                { y: 100, opacity: 0, scale: 0.8, xPercent: -50, left: '50%' }, 
+                { y: 0, opacity: 1, scale: 1, xPercent: -50, left: '50%', duration: 0.7, ease: 'elastic.out(1, 0.5)' }
             );
 
             setTimeout(() => {
                 gsap.to(toast, {
-                    y: 100, opacity: 0, scale: 0.8, x: '-50%', duration: 0.4, ease: 'power2.in',
+                    y: 100, opacity: 0, scale: 0.8, xPercent: -50, left: '50%', duration: 0.4, ease: 'power2.in',
                     onComplete: () => toast.remove()
                 });
             }, 3000);
