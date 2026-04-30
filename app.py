@@ -81,7 +81,7 @@ async def get_access_token(uid: str, password: str):
 async def get_jwt(uid: str, password: str):
     access_token, open_id = await get_access_token(uid, password)
     encrypted = aes_encrypt(build_login_request(open_id, access_token))
-    url = "https://loginbp.ggblueshark.com/MajorLogin"
+    url = "https://loginbp.ggpolarbear.com/MajorLogin"
     headers = {
         'User-Agent': USERAGENT,
         'Content-Type': "application/octet-stream",

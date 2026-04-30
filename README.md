@@ -101,7 +101,7 @@ http://127.0.0.1:5000/v1/auth/tsun?uid=12345678&password=754NCUB3ZYJNAX1OI24B
   "ipRegion": "PK",
   "lockRegion": "PK",
   "notiRegion": "SG",
-  "serverUrl": "https://clientbp.ggwhitehawk.com",
+  "serverUrl": "https://clientbp.ggpolarbear.com",
   "token": "eyJhbGciOiJIUzI1NiIsInN2ciI6IjEiLCJ0eXAiOiJ"
 }
 ```

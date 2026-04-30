@@ -295,12 +295,49 @@ const App = {
             btn.innerHTML = '<i class="icon-check"></i><span>Copied</span>';
             btn.style.borderColor = 'var(--primary)';
 
+            this.showToast('Copied to clipboard!', 'success');
+
             setTimeout(() => {
                 btn.innerHTML = originalContent;
                 btn.style.borderColor = '';
             }, 2000);
         } catch (err) {
             console.error('Clipboard error', err);
+            this.showToast('Failed to copy', 'error');
+        }
+    },
+
+    showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast-popup ${type} show`;
+        
+        const icon = type === 'success' ? '✨' : '😅';
+        toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+        
+        document.body.appendChild(toast);
+        
+        // Custom bouncing popup
+        if (window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.fromTo(toast, 
+                { y: 100, opacity: 0, scale: 0.8, x: '-50%' }, 
+                { y: 0, opacity: 1, scale: 1, x: '-50%', duration: 0.7, ease: 'elastic.out(1, 0.5)' }
+            );
+
+            setTimeout(() => {
+                gsap.to(toast, {
+                    y: 100, opacity: 0, scale: 0.8, x: '-50%', duration: 0.4, ease: 'power2.in',
+                    onComplete: () => toast.remove()
+                });
+            }, 3000);
+        } else {
+            // Fallback
+            toast.style.transform = 'translate(-50%, 0) scale(1)';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.transform = 'translate(-50%, 150px) scale(0.8)';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
         }
     },
 
