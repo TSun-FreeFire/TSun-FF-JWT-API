@@ -96,8 +96,9 @@ const Animations = {
         particle.className = 'trail-particle';
 
         const size = Math.random() * 3 + 1;
-        const color = Math.random() > 0.5 ? '#dc2626' : '#8e8ea3';
-        const opacity = Math.random() * 0.4 + 0.3;
+        const colors = ['#ff7eb6', '#ffd166', '#82c8bd', '#b280ff'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const opacity = 1;
 
         Object.assign(particle.style, {
             position: 'fixed',
@@ -107,10 +108,10 @@ const Animations = {
             height: `${size}px`,
             background: color,
             borderRadius: '50%',
+            border: '2px solid #2c2c36',
             pointerEvents: 'none',
             zIndex: '9998',
-            opacity: opacity,
-            boxShadow: `0 0 ${size * 3}px ${color}`
+            opacity: opacity
         });
 
         document.body.appendChild(particle);
@@ -146,7 +147,8 @@ const Animations = {
             const destinationY = Math.sin(angle) * velocity;
             const rotation = Math.random() * 360;
             const delay = Math.random() * 0.15;
-            const color = Math.random() > 0.35 ? '#dc2626' : '#f0f0f0';
+            const colors = ['#ff7eb6', '#ffd166', '#82c8bd', '#b280ff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
 
             Object.assign(particle.style, {
                 position: 'fixed',
@@ -156,10 +158,10 @@ const Animations = {
                 height: `${size}px`,
                 background: color,
                 borderRadius: '50%',
+                border: '2px solid #2c2c36',
                 pointerEvents: 'none',
                 zIndex: '10000',
-                opacity: '0.9',
-                boxShadow: `0 0 15px ${color}`,
+                opacity: '1',
                 transform: `translate(-50%, -50%) rotate(${rotation}deg)`
             });
 

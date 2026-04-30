@@ -215,12 +215,12 @@ const App = {
         responseSection.style.display = 'block';
 
         if (window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            gsap.fromTo(responseSection, { opacity: 0, y: 20, scale: 0.98 }, {
+            gsap.fromTo(responseSection, { opacity: 0, y: 40, scale: 0.8 }, {
                 opacity: 1,
                 y: 0,
                 scale: 1,
-                duration: 0.45,
-                ease: 'power3.out'
+                duration: 0.8,
+                ease: 'elastic.out(1, 0.5)'
             });
         }
 
@@ -247,12 +247,12 @@ const App = {
         responseSection.style.display = 'block';
 
         if (window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            gsap.fromTo(responseSection, { opacity: 0, y: 20, scale: 0.98 }, {
+            gsap.fromTo(responseSection, { opacity: 0, y: 40, scale: 0.8 }, {
                 opacity: 1,
                 y: 0,
                 scale: 1,
-                duration: 0.45,
-                ease: 'power3.out'
+                duration: 0.8,
+                ease: 'elastic.out(1, 0.5)'
             });
         }
 

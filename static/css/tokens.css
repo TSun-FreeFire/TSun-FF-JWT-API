@@ -1,25 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=VT323&display=swap');
+
 :root {
-    --bg-core: #000000;
-    --bg-surface: #0f0f0f;
-    --bg-elevated: #121212;
-    --primary: #dc2626;
-    --primary-strong: #ef4444;
-    --primary-glow: rgba(220, 38, 38, 0.35);
-    --secondary: #8e8ea3;
-    --text-primary: #f0f0f0;
-    --text-secondary: #b8b8c7;
-    --text-muted: #8e8ea3;
-    --border-subtle: #262626;
-    --border-strong: rgba(220, 38, 38, 0.45);
-    --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.45);
-    --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.58);
-    --shadow-glow: 0 0 24px rgba(220, 38, 38, 0.22);
+    --bg-core: #ffe6f0;
+    --bg-surface: #d7bdf2;
+    --bg-elevated: #ffffff;
+    --primary: #b280ff;
+    --primary-strong: #9b5cf6;
+    --primary-glow: rgba(178, 128, 255, 0.35);
+    --secondary: #ffc2df;
+    --text-primary: #2c2c36;
+    --text-secondary: #4e4e5d;
+    --text-muted: #6e6e80;
+    --border-subtle: #2c2c36;
+    --border-strong: #2c2c36;
+    --shadow-sm: 2px 2px 0px #2c2c36;
+    --shadow-md: 4px 4px 0px #2c2c36;
+    --shadow-glow: none;
     --surface-1: var(--bg-surface);
     --surface-2: var(--bg-elevated);
-    --font-heading: 'Cinzel', serif;
-    --font-body: 'Inter', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --easing-organic: cubic-bezier(0.16, 1, 0.3, 1);
-    --focus-glow: 0 0 0 1px var(--primary);
-    --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+    --font-heading: 'Fredoka', sans-serif;
+    --font-body: 'Fredoka', sans-serif;
+    --font-mono: 'VT323', monospace;
+    --easing-organic: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --focus-glow: 0 0 0 2px #ffffff, 0 0 0 5px #2c2c36;
+    --grain: none;
 }

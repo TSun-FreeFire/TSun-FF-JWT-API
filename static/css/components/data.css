@@ -1,76 +1,36 @@
 /* Data / Code Blocks */
 .code-block,
 .json-container {
-    background: #050505;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
+    background: #fff;
+    border: 3px solid var(--border-strong);
+    border-radius: 12px;
     padding: 1.5rem;
     font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: #d0d0d0;
+    font-size: 1rem;
+    color: var(--text-primary);
     position: relative;
     overflow-x: auto;
-}
-
-/* CRT Flicker Effect (Low Frequency) */
-.code-block::before,
-.json-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(220, 38, 38, 0.04);
-    pointer-events: none;
-    animation: crt-flicker 4s infinite;
-    z-index: 1;
-}
-
-@keyframes crt-flicker {
-
-    0%,
-    100% {
-        opacity: 0.8;
-    }
-
-    5% {
-        opacity: 0.4;
-    }
-
-    10% {
-        opacity: 0.8;
-    }
-
-    15% {
-        opacity: 0.9;
-    }
-
-    20% {
-        opacity: 0.5;
-    }
-
-    50% {
-        opacity: 0.8;
-    }
-
-    80% {
-        opacity: 0.6;
-    }
+    box-shadow: inset 2px 2px 0px rgba(0,0,0,0.05);
 }
 
 pre {
     margin: 0;
+    font-weight: 500;
 }
 
 /* Response Section */
 .response-card {
-    border-color: rgba(220, 38, 38, 0.35);
-    box-shadow: 0 0 30px rgba(220, 38, 38, 0.08);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+    background: var(--secondary);
+}
+
+.response-card .terminal-panel {
+    background: #fff;
 }
 
 .response-title {
-    color: var(--primary);
+    color: var(--text-primary);
 }
 
 .json-header {
@@ -78,7 +38,7 @@ pre {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 3px dashed var(--border-strong);
     padding-bottom: 0.5rem;
 }
 
@@ -86,8 +46,9 @@ pre {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
+    color: var(--text-primary);
+    font-weight: bold;
+    font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }

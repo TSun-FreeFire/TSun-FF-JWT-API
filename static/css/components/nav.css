@@ -1,11 +1,11 @@
-/* Navigation (Asymmetric Pill Rail) */
+/* Navigation (Sticker Rail/Tabs) */
 .nav-tabs {
     display: flex;
-    background: #0b0b0b;
-    backdrop-filter: blur(10px);
+    background: #fff;
     padding: 0.5rem;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    border: 3px solid var(--border-strong);
+    box-shadow: var(--shadow-sm);
     margin-bottom: 3rem;
     position: relative;
     width: fit-content;
@@ -18,10 +18,10 @@
     border: none;
     color: var(--text-secondary);
     padding: 0.75rem 1.5rem;
-    border-radius: 0;
+    border-radius: 12px;
     font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: bold;
+    font-size: 1.1rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -36,50 +36,21 @@
 }
 
 .tab-btn.active {
-    color: #fff;
+    color: var(--text-primary);
 }
 
-/* The "Vein" Indicator */
+/* The Cute Sliding Indicator */
 .nav-indicator {
     position: absolute;
     top: 0.5rem;
     left: 0.5rem;
     /* Initial, JS will update */
     height: calc(100% - 1rem);
-    background: var(--primary);
-    border-radius: 0;
+    background: var(--bg-surface);
+    border-radius: 12px;
     z-index: 1;
     transition:
-        left 0.5s var(--easing-organic),
-        width 0.5s var(--easing-organic);
-    box-shadow: 0 0 18px rgba(220, 38, 38, 0.45);
-}
-
-/* Pulse animation for the vein */
-.nav-indicator::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: inherit;
-    background: inherit;
-    filter: blur(4px);
-    opacity: 0.6;
-    animation: vein-pulse 2s infinite ease-in-out;
-}
-
-@keyframes vein-pulse {
-
-    0%,
-    100% {
-        opacity: 0.35;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.7;
-        transform: scale(1.05);
-    }
+        left 0.4s var(--easing-organic),
+        width 0.4s var(--easing-organic);
+    border: 3px solid var(--border-strong);
 }

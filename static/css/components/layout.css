@@ -5,7 +5,7 @@
     align-items: center;
     margin-bottom: 4rem;
     padding-bottom: 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 3px solid var(--border-strong);
 }
 
 .brand {
@@ -17,25 +17,30 @@
 .brand-icon {
     width: 48px;
     height: 48px;
-    background: var(--primary);
-    border-radius: 0;
+    background: var(--bg-surface);
+    border: 3px solid var(--border-strong);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
+    font-size: 24px;
 }
 
 .brand-title {
     font-size: 1.5rem;
     margin: 0;
     line-height: 1.1;
+    color: var(--text-primary);
+    text-shadow: 2px 2px 0px #fff;
 }
 
 .brand-tagline {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
     margin: 0;
+    font-weight: 600;
 }
 
 .meta-info {
@@ -45,13 +50,15 @@
 
 .version-pill,
 .release-pill {
-    background: #0f0f0f;
+    background: var(--bg-elevated);
     padding: 0.25rem 0.75rem;
-    border-radius: 0;
-    font-size: 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
     font-family: var(--font-mono);
-    border: 1px solid var(--border-subtle);
+    border: 3px solid var(--border-strong);
     color: var(--text-primary);
+    box-shadow: 2px 2px 0px var(--border-strong);
+    font-weight: bold;
 }
 
 /* Footer */
@@ -59,13 +66,18 @@
     margin-top: 4rem;
     text-align: center;
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     padding: 2rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 3px solid var(--border-strong);
+    font-weight: 600;
+    background: var(--bg-elevated);
+    border-radius: 16px;
+    border: 3px solid var(--border-strong);
+    box-shadow: var(--shadow-md);
 }
 
 .footer a {
-    color: var(--primary);
+    color: var(--primary-strong);
     text-decoration: none;
     transition: opacity 0.2s;
 }
@@ -76,5 +88,6 @@
 
 .separator {
     margin: 0 0.5rem;
-    opacity: 0.3;
+    color: var(--border-strong);
+    opacity: 1;
 }
