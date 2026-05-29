@@ -2,3 +2,5 @@ flask
 httpx
 protobuf==6.30.0
 pycryptodome
+gunicorn
+gevent

@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  tsun-ff-jwt-api:
+    build: .
+    container_name: tsun-ff-jwt-api
+    restart: always
+    ports:
+      - "127.0.0.1:8077:8077"
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8077/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
