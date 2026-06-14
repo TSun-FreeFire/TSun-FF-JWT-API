@@ -8,6 +8,26 @@ PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
 CONTAINER_NAME="${CONTAINER_NAME:-tsun-ff-jwt-api}"
 IMAGE_NAME="${IMAGE_NAME:-tsun-ff-jwt-api}"
 
+# Load local .env file if it exists
+if [ -f "${PROJECT_DIR}/.env" ]; then
+  echo "✔ Found .env file, loading configuration..."
+  # Export variables while ignoring comments
+  export $(grep -v '^#' "${PROJECT_DIR}/.env" | xargs)
+fi
+
+# Validate environment variables
+MISSING_VARS=()
+if [ -z "${VALID_API_KEY:-}" ]; then MISSING_VARS+=("VALID_API_KEY"); fi
+if [ -z "${ADMIN_KEY:-}" ]; then MISSING_VARS+=("ADMIN_KEY"); fi
+if [ -z "${DATABASE_URL:-}" ]; then MISSING_VARS+=("DATABASE_URL"); fi
+
+if [ ${#MISSING_VARS[@]} -ne 0 ]; then
+  echo "ERROR: Missing required environment variable(s): ${MISSING_VARS[*]}"
+  echo "Please set them in your environment or define them in a .env file."
+  echo "For purchase api key contact with @saeedxdie on Telegram or instagram"
+  exit 1
+fi
+
 echo ""
 echo "╔══════════════════════════════════════════════════╗"
 echo "║   TSun FF JWT API — VPS Setup                   ║"
@@ -44,7 +64,12 @@ if [ -f docker-compose.yml ] && docker compose version >/dev/null 2>&1; then
   sudo docker compose up -d --build
 else
   sudo docker run -d --name "${CONTAINER_NAME}" --restart always \
-    -p "127.0.0.1:${APP_PORT}:${APP_PORT}" -e PYTHONUNBUFFERED=1 "${IMAGE_NAME}:latest"
+    -p "127.0.0.1:${APP_PORT}:${APP_PORT}" \
+    -e PYTHONUNBUFFERED=1 \
+    -e VALID_API_KEY="${VALID_API_KEY}" \
+    -e ADMIN_KEY="${ADMIN_KEY}" \
+    -e DATABASE_URL="${DATABASE_URL}" \
+    "${IMAGE_NAME}:latest"
 fi
 
 echo "=== [5/7] Configuring Nginx ==="

@@ -9,6 +9,9 @@ services:
       - "127.0.0.1:8077:8077"
     environment:
       - PYTHONUNBUFFERED=1
+      - VALID_API_KEY=${VALID_API_KEY}
+      - ADMIN_KEY=${ADMIN_KEY}
+      - DATABASE_URL=${DATABASE_URL}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8077/')"]
       interval: 30s

@@ -1,6 +1,10 @@
 import asyncio
 import base64
 import json
+import os
+import sys
+from datetime import datetime, timedelta, timezone
+import secrets
 from flask import Flask, jsonify, request, render_template
 import httpx
 from Crypto.Cipher import AES
@@ -10,6 +14,11 @@ from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import runtime_version as _runtime_version
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+import psycopg2
+from dotenv import load_dotenv
+
+# Load env variables
+load_dotenv()
 
 # === Proto Setup ===
 _runtime_version.ValidateProtobufRuntimeVersion(
@@ -30,8 +39,43 @@ MAIN_KEY = base64.b64decode('WWcmdGMlREV1aDYlWmNeOA==')
 MAIN_IV = base64.b64decode('Nm95WkRyMjJFM3ljaGpNJQ==')
 USERAGENT = "Dalvik/2.1.0 (Linux; U; Android 13; CPH2095 Build/RKQ1.211119.001)"
 RELEASEVERSION = "OB53"
-# API key is now handled in the frontend configuration
-# VALID_API_KEY = "saeed"
+
+# Environment Variables Validation
+VALID_API_KEY = os.environ.get("VALID_API_KEY")
+ADMIN_KEY = os.environ.get("ADMIN_KEY")
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if not VALID_API_KEY or not ADMIN_KEY or not DATABASE_URL:
+    missing = []
+    if not VALID_API_KEY: missing.append("VALID_API_KEY")
+    if not ADMIN_KEY: missing.append("ADMIN_KEY")
+    if not DATABASE_URL: missing.append("DATABASE_URL")
+    print(f"CRITICAL ERROR: Missing environment variable(s): {', '.join(missing)}", file=sys.stderr)
+    print("For purchase api key contact with @saeedxdie on Telegram or instagram", file=sys.stderr)
+    sys.exit(1)
+
+# Initialize Database Connection Helper
+def get_db_connection():
+    return psycopg2.connect(DATABASE_URL)
+
+# Verify database connection and create table on startup
+try:
+    conn = get_db_connection()
+    with conn.cursor() as cur:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS api_keys (
+                key VARCHAR(255) PRIMARY KEY,
+                expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                status VARCHAR(50) DEFAULT 'active'
+            );
+        """)
+        conn.commit()
+    conn.close()
+except Exception as e:
+    print(f"CRITICAL ERROR: Failed to connect to Neon PostgreSQL database: {e}", file=sys.stderr)
+    print("For purchase api key contact with @saeedxdie on Telegram or instagram", file=sys.stderr)
+    sys.exit(1)
 
 # === Crypto ===
 def pad(data: bytes) -> bytes:
@@ -121,9 +165,36 @@ def index():
 
 @app.route('/v1/auth/<string:apikey>', methods=["GET"])
 def auth_route(apikey):
-    # API key validation is now handled in the frontend
-    # if apikey != VALID_API_KEY:
-    #     return jsonify({"error": "Invalid API key."}), 401
+    # API key validation
+    if apikey == VALID_API_KEY:
+        # Master key is valid
+        pass
+    else:
+        # Check database for key validity
+        try:
+            conn = get_db_connection()
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT expires_at, status FROM api_keys WHERE key = %s",
+                    (apikey,)
+                )
+                row = cur.fetchone()
+                if not row:
+                    conn.close()
+                    return jsonify({
+                        "error": "Invalid API key. For purchase api key contact with @saeedxdie on Telegram or instagram"
+                    }), 401
+                
+                expires_at, status = row
+                now = datetime.now(timezone.utc)
+                if status != 'active' or now > expires_at:
+                    conn.close()
+                    return jsonify({
+                        "error": "API key has expired or is invalid. For purchase api key contact with @saeedxdie on Telegram or instagram"
+                    }), 401
+            conn.close()
+        except Exception as e:
+            return jsonify({"error": f"Database verification error: {str(e)}"}), 500
 
     uid = request.args.get('uid')
     password = request.args.get('password')
@@ -136,6 +207,96 @@ def auth_route(apikey):
         return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# === Admin Routes ===
+@app.route('/v1/admin/create-key', methods=["GET", "POST"])
+def create_key():
+    admin_key = request.headers.get("X-Admin-Key") or request.args.get("admin_key")
+    if admin_key != ADMIN_KEY:
+        return jsonify({"error": "Unauthorized admin access."}), 401
+
+    try:
+        duration_str = request.args.get("duration") or (request.json.get("duration") if request.is_json else None)
+        duration = int(duration_str)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid duration. Must be an integer representing days (1, 3, 7, or 30)."}), 400
+
+    if duration not in [1, 3, 7, 30]:
+        return jsonify({"error": "Invalid duration. Supported lifespans: 1, 3, 7, 30 days."}), 400
+
+    new_key = "saeed_" + secrets.token_hex(12)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=duration)
+
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO api_keys (key, expires_at, status) VALUES (%s, %s, %s)",
+                (new_key, expires_at, 'active')
+            )
+            conn.commit()
+        conn.close()
+        return jsonify({
+            "status": "success",
+            "key": new_key,
+            "duration_days": duration,
+            "expires_at": expires_at.isoformat()
+        })
+    except Exception as e:
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+
+@app.route('/v1/admin/list-keys', methods=["GET"])
+def list_keys():
+    admin_key = request.headers.get("X-Admin-Key") or request.args.get("admin_key")
+    if admin_key != ADMIN_KEY:
+        return jsonify({"error": "Unauthorized admin access."}), 401
+
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            cur.execute("SELECT key, expires_at, created_at, status FROM api_keys ORDER BY created_at DESC")
+            rows = cur.fetchall()
+            
+            keys_list = []
+            for row in rows:
+                keys_list.append({
+                    "key": row[0],
+                    "expires_at": row[1].isoformat() if row[1] else None,
+                    "created_at": row[2].isoformat() if row[2] else None,
+                    "status": row[3]
+                })
+        conn.close()
+        return jsonify({"keys": keys_list})
+    except Exception as e:
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+
+@app.route('/v1/admin/revoke-key', methods=["GET", "POST"])
+def revoke_key():
+    admin_key = request.headers.get("X-Admin-Key") or request.args.get("admin_key")
+    if admin_key != ADMIN_KEY:
+        return jsonify({"error": "Unauthorized admin access."}), 401
+
+    target_key = request.args.get("key") or (request.json.get("key") if request.is_json else None)
+    if not target_key:
+        return jsonify({"error": "Missing key to revoke."}), 400
+
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE api_keys SET status = 'revoked' WHERE key = %s",
+                (target_key,)
+            )
+            conn.commit()
+            rowcount = cur.rowcount
+        conn.close()
+        
+        if rowcount == 0:
+            return jsonify({"error": "Key not found."}), 404
+            
+        return jsonify({"status": "success", "message": f"Key {target_key} has been revoked."})
+    except Exception as e:
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
 
 # === Run ===
 if __name__ == "__main__":

@@ -4,3 +4,5 @@ protobuf==6.30.0
 pycryptodome
 gunicorn
 gevent
+python-dotenv
+psycopg2-binary
