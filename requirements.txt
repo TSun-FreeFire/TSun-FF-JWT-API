@@ -1,6 +1,6 @@
 flask
 httpx
-protobuf==6.30.0
+protobuf==6.33.5
 pycryptodome
 gunicorn
 gevent
