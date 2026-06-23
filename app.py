@@ -38,7 +38,27 @@ LoginRes = _globals['LoginRes']
 MAIN_KEY = base64.b64decode('WWcmdGMlREV1aDYlWmNeOA==')
 MAIN_IV = base64.b64decode('Nm95WkRyMjJFM3ljaGpNJQ==')
 USERAGENT = "Dalvik/2.1.0 (Linux; U; Android 13; CPH2095 Build/RKQ1.211119.001)"
-RELEASEVERSION = "OB53"
+
+# Load runtime config from remote Gist
+CONFIG_URL = os.environ.get(
+    "CONFIG_URL",
+    "https://gist.githubusercontent.com/SaeedX302/b8277fdd6a2e71b599a39299f3ab3545/raw/config.json",
+)
+try:
+    _resp = httpx.get(CONFIG_URL, timeout=10.0)
+    _resp.raise_for_status()
+    _config = _resp.json()
+except (httpx.HTTPError, json.JSONDecodeError) as e:
+    print(f"CRITICAL ERROR: Failed to load config from {CONFIG_URL}: {e}", file=sys.stderr)
+    sys.exit(1)
+
+RELEASEVERSION = _config.get("RELEASEVERSION")
+MAJOR_LOGIN_URL = _config.get("MAJOR_LOGIN_URL")
+
+if not RELEASEVERSION or not MAJOR_LOGIN_URL:
+    missing = [k for k in ("RELEASEVERSION", "MAJOR_LOGIN_URL") if not _config.get(k)]
+    print(f"CRITICAL ERROR: Missing config.json key(s): {', '.join(missing)}", file=sys.stderr)
+    sys.exit(1)
 
 # Environment Variables Validation
 VALID_API_KEY = os.environ.get("VALID_API_KEY")
@@ -125,7 +145,7 @@ async def get_access_token(uid: str, password: str):
 async def get_jwt(uid: str, password: str):
     access_token, open_id = await get_access_token(uid, password)
     encrypted = aes_encrypt(build_login_request(open_id, access_token))
-    url = "https://loginbp.ggpolarbear.com/MajorLogin"
+    url = MAJOR_LOGIN_URL.rstrip("/") + "/MajorLogin"
     headers = {
         'User-Agent': USERAGENT,
         'Content-Type': "application/octet-stream",
