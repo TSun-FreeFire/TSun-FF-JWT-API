@@ -136,7 +136,7 @@ async def get_access_token(uid: str, password: str):
     )
 
     async with httpx.AsyncClient() as client:
-        response = await client.post(url, data=payload, headers=headers)
+        response = await client.post(url, content=payload, headers=headers)
         response.raise_for_status()  # Raise an exception for HTTP errors
         data = response.json()
         return data.get("access_token"), data.get("open_id")
@@ -155,7 +155,7 @@ async def get_jwt(uid: str, password: str):
     }
 
     async with httpx.AsyncClient() as client:
-        resp = await client.post(url, data=encrypted, headers=headers)
+        resp = await client.post(url, content=encrypted, headers=headers)
         msg = LoginRes()
         msg.ParseFromString(resp.content)
         response_data = json.loads(MessageToJson(msg))
@@ -237,6 +237,8 @@ def create_key():
 
     try:
         duration_str = request.args.get("duration") or (request.json.get("duration") if request.is_json else None)
+        if duration_str is None:
+            raise ValueError("Missing duration")
         duration = int(duration_str)
     except (TypeError, ValueError):
         return jsonify({"error": "Invalid duration. Must be an integer representing days (1, 3, 7, or 30)."}), 400
