@@ -16,8 +16,7 @@ const App = {
     },
 
     state: {
-        isSubmitting: false,
-        defaultApiKey: 'saeed'
+        isSubmitting: false
     },
 
     init() {
@@ -35,7 +34,11 @@ const App = {
         // Remove readonly after a short delay to prevent autofill
         setTimeout(() => {
             const uidInput = document.getElementById('uid');
+            const apiKeyInput = document.getElementById('apiKey');
             const passwordInput = document.getElementById('password');
+            if (apiKeyInput && apiKeyInput.hasAttribute('readonly')) {
+                apiKeyInput.removeAttribute('readonly');
+            }
             if (uidInput && uidInput.hasAttribute('readonly')) {
                 uidInput.removeAttribute('readonly');
             }
@@ -157,8 +160,14 @@ const App = {
         e.preventDefault();
         if (this.state.isSubmitting) return;
 
+        const apiKey = document.getElementById('apiKey').value.trim();
         const uid = document.getElementById('uid').value.trim();
         const password = document.getElementById('password').value.trim();
+
+        if (!apiKey) {
+            this.showError('API key required');
+            return;
+        }
 
         if (!uid || !password) {
             this.showError('Identification sequence incomplete');
@@ -168,7 +177,7 @@ const App = {
         this.setLoading(true);
 
         try {
-            const response = await fetch(`/v1/auth/${this.state.defaultApiKey}?uid=${uid}&password=${password}`);
+            const response = await fetch(`/v1/auth/${encodeURIComponent(apiKey)}?uid=${encodeURIComponent(uid)}&password=${encodeURIComponent(password)}`);
             const data = await response.json();
 
             if (!response.ok) {

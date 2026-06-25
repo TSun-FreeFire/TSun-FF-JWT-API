@@ -98,6 +98,20 @@ System.out.println("Render mode: DARK / HIGH-CONTRAST");</pre>
                         </div>
 
                         <form id="authForm" class="auth-form" autocomplete="off">
+                            <!-- API Key Field -->
+                            <div class="form-field">
+                                <label class="field-label" for="apiKey">
+                                    <i class="icon-key"></i>
+                                    <span>API Key</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="apiKey" name="api-key-field" class="field-input mono"
+                                        placeholder="Enter API Key" spellcheck="false" autocomplete="off" readonly
+                                        onfocus="this.removeAttribute('readonly');" required>
+                                </div>
+                                <span class="field-hint">Runtime access credential</span>
+                            </div>
+
                             <!-- UID Field -->
                             <div class="form-field">
                                 <label class="field-label" for="uid">
@@ -220,6 +234,16 @@ System.out.println("Render mode: DARK / HIGH-CONTRAST");</pre>
                             <h3 style="margin-bottom: 1rem; color: var(--primary);">Endpoint</h3>
                             <div class="code-block">
                                 <code>GET /v1/auth/{apikey}?uid={uid}&password={password}</code>
+                            </div>
+                        </div>
+
+                        <div class="doc-section" style="margin-bottom: 2rem;">
+                            <h3 style="margin-bottom: 1rem; color: var(--primary);">Admin Endpoints</h3>
+                            <div class="code-block">
+                                <code>POST /v1/admin/create-key | POST /v1/admin/list-keys | POST /v1/admin/revoke-key</code>
+                            </div>
+                            <div class="code-block" style="margin-top: 0.75rem;">
+                                <code>X-Admin-Key: {admin_key}</code>
                             </div>
                         </div>
 

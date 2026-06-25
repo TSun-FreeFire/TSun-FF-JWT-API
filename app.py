@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import json
+import logging
 import os
 import sys
 from datetime import datetime, timedelta, timezone
@@ -19,6 +20,7 @@ from dotenv import load_dotenv
 
 # Load env variables
 load_dotenv()
+logging.basicConfig(level=logging.INFO)
 
 # === Proto Setup ===
 _runtime_version.ValidateProtobufRuntimeVersion(
@@ -214,7 +216,8 @@ def auth_route(apikey):
                     }), 401
             conn.close()
         except Exception as e:
-            return jsonify({"error": f"Database verification error: {str(e)}"}), 500
+            app.logger.exception("Database verification failed")
+            return jsonify({"error": "Database verification failed."}), 500
 
     uid = request.args.get('uid')
     password = request.args.get('password')
@@ -226,12 +229,13 @@ def auth_route(apikey):
         data = asyncio.run(get_jwt(uid, password))
         return jsonify(data)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        app.logger.exception("JWT generation failed")
+        return jsonify({"error": "Token generation failed."}), 500
 
 # === Admin Routes ===
-@app.route('/v1/admin/create-key', methods=["GET", "POST"])
+@app.route('/v1/admin/create-key', methods=["POST"])
 def create_key():
-    admin_key = request.headers.get("X-Admin-Key") or request.args.get("admin_key")
+    admin_key = request.headers.get("X-Admin-Key")
     if admin_key != ADMIN_KEY:
         return jsonify({"error": "Unauthorized admin access."}), 401
 
@@ -265,11 +269,12 @@ def create_key():
             "expires_at": expires_at.isoformat()
         })
     except Exception as e:
-        return jsonify({"error": f"Database error: {str(e)}"}), 500
+        app.logger.exception("Failed to create API key")
+        return jsonify({"error": "Database operation failed."}), 500
 
-@app.route('/v1/admin/list-keys', methods=["GET"])
+@app.route('/v1/admin/list-keys', methods=["POST"])
 def list_keys():
-    admin_key = request.headers.get("X-Admin-Key") or request.args.get("admin_key")
+    admin_key = request.headers.get("X-Admin-Key")
     if admin_key != ADMIN_KEY:
         return jsonify({"error": "Unauthorized admin access."}), 401
 
@@ -290,11 +295,12 @@ def list_keys():
         conn.close()
         return jsonify({"keys": keys_list})
     except Exception as e:
-        return jsonify({"error": f"Database error: {str(e)}"}), 500
+        app.logger.exception("Failed to list API keys")
+        return jsonify({"error": "Database operation failed."}), 500
 
-@app.route('/v1/admin/revoke-key', methods=["GET", "POST"])
+@app.route('/v1/admin/revoke-key', methods=["POST"])
 def revoke_key():
-    admin_key = request.headers.get("X-Admin-Key") or request.args.get("admin_key")
+    admin_key = request.headers.get("X-Admin-Key")
     if admin_key != ADMIN_KEY:
         return jsonify({"error": "Unauthorized admin access."}), 401
 
@@ -318,7 +324,8 @@ def revoke_key():
             
         return jsonify({"status": "success", "message": f"Key {target_key} has been revoked."})
     except Exception as e:
-        return jsonify({"error": f"Database error: {str(e)}"}), 500
+        app.logger.exception("Failed to revoke API key")
+        return jsonify({"error": "Database operation failed."}), 500
 
 # === Run ===
 if __name__ == "__main__":
